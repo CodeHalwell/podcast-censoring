@@ -1,17 +1,24 @@
 [project]
-name = "podcast-censoring"
-version = "0.1.0"
-description = "Add your description here"
+name = "podcast-transcription"
+version = "1.0.0"
+description = "Complete pipeline for discovering podcasts and transcribing episodes using Modal cloud infrastructure"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
-    "datasets>=3.6.0",
-    "huggingface-hub[hf-xet]>=0.33.0",
-    "librosa>=0.11.0",
+    "gql>=3.5.3",
     "modal>=1.0.4",
     "python-dotenv>=1.1.0",
-    "python-graphql-client>=0.4.3",
-    "soundfile>=0.13.1",
     "transformers>=4.52.4",
-    "whisperx>=3.3.4",
 ]
+
+[project.scripts]
+transcribe = "scripts.transcribe:main"
+deploy-modal = "scripts.deploy:main"
+stop-modal = "scripts.stop_modal:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/podcast_transcription"]

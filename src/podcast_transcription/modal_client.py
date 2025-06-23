@@ -1,3 +1,7 @@
+"""
+Modal cloud integration for podcast transcription using H100 GPUs and Whisper-large-v3.
+"""
+
 import modal
 
 cuda_version = "12.4.0"  # should be no greater than host CUDA version
@@ -32,8 +36,8 @@ cache_vol = modal.Volume.from_name("whisper-cache", create_if_missing=True)
 @app.cls(
     gpu=GPU_CONFIG,
     volumes={CACHE_DIR: cache_vol},
-    scaledown_window=60 * 10,
-    timeout=60 * 60,
+    scaledown_window=60 * 2,   # Scale down after 2 minutes (faster resource release)
+    timeout=60 * 60,           # Max 1 hour per task
 )
 @modal.concurrent(max_inputs=15)
 class Model:
@@ -134,4 +138,4 @@ def main():
                 text = chunk.get("text", "")
                 print(f"[{timestamp}] {text}")
     else:
-        print("Transcription failed.")
+        print("Transcription failed.") 
